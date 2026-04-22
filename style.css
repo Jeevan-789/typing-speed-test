@@ -1,14 +1,30 @@
 body {
     font-family: Arial;
-    background: #121212;
     color: white;
     text-align: center;
+    height: 100vh;
+    margin: 0;
+
+    /* 🔥 Animated gradient background */
+    background: linear-gradient(-45deg, #1e3c72, #2a5298, #6a11cb, #2575fc);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .container {
+    margin-top: 80px;
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
     width: 400px;
-    margin: auto;
-    padding-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
 }
 
 textarea {
@@ -20,4 +36,5 @@ textarea {
 button {
     margin-top: 10px;
     padding: 10px;
+    cursor: pointer;
 }
