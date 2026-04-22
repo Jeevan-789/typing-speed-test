@@ -1,90 +1,80 @@
-const textElement = document.getElementById("text");
-const inputElement = document.getElementById("input");
-const timeElement = document.getElementById("time");
-const wpmElement = document.getElementById("wpm");
-const accuracyElement = document.getElementById("accuracy");
+const textEl = document.getElementById("text");
+const inputEl = document.getElementById("input");
+const timeEl = document.getElementById("time");
+const wpmEl = document.getElementById("wpm");
+const accEl = document.getElementById("accuracy");
 
-// 🔹 Random sentences list
+// 🔹 Sentences
 const sentences = [
     "The quick brown fox jumps over the lazy dog.",
-    "JavaScript is a powerful programming language.",
-    "Practice coding every day to improve your skills.",
-    "Typing fast requires both speed and accuracy.",
-    "Consistency is the key to success in programming.",
-    "Artificial intelligence is transforming the world.",
-    "Frontend development involves HTML CSS and JavaScript.",
-    "Debugging is an essential skill for every developer."
+    "JavaScript makes web pages interactive and dynamic.",
+    "Practice daily to become a better programmer.",
+    "Typing speed improves with consistent effort.",
+    "Frontend development is fun and creative."
 ];
 
-let time = 60;
 let timer;
-let started = false;
+let time = 0;
+let running = false;
 
-// 🔹 Get random sentence
-function getRandomSentence() {
+// 🔹 Random sentence
+function getSentence() {
     return sentences[Math.floor(Math.random() * sentences.length)];
 }
 
-// 🔹 Start test
+// 🔹 Start Test
 function startTest() {
-    inputElement.value = "";
-    inputElement.disabled = false;
+    inputEl.value = "";
+    inputEl.disabled = false;
 
-    // set random sentence
-    textElement.innerText = getRandomSentence();
+    textEl.innerText = getSentence();
 
-    time = 60;
-    started = true;
-
-    timeElement.innerText = time;
+    time = 0;
+    running = true;
+    timeEl.innerText = time;
 
     clearInterval(timer);
 
+    // ⏱ Stopwatch (count UP)
     timer = setInterval(() => {
-        time--;
-        timeElement.innerText = time;
-
-        if (time === 0) {
-            clearInterval(timer);
-            finishTest();
-        }
+        time++;
+        timeEl.innerText = time;
     }, 1000);
 }
 
-// 🔹 Stop timer when sentence completed
-inputElement.addEventListener("input", () => {
-    if (!started) return;
+// 🔹 Detect typing
+inputEl.addEventListener("input", () => {
+    if (!running) return;
 
-    const originalText = textElement.innerText;
-    const typedText = inputElement.value;
+    const original = textEl.innerText;
+    const typed = inputEl.value;
 
-    // if full sentence typed correctly → stop timer
-    if (typedText === originalText) {
+    // ✅ Stop when sentence completed
+    if (typed === original) {
         clearInterval(timer);
+        running = false;
         finishTest();
     }
 });
 
-// 🔹 Final result calculation
+// 🔹 Final result
 function finishTest() {
-    started = false;
-    inputElement.disabled = true;
+    inputEl.disabled = true;
 
-    const originalText = textElement.innerText;
-    const typedText = inputElement.value;
+    const original = textEl.innerText;
+    const typed = inputEl.value;
 
-    const words = typedText.trim().split(/\s+/).length;
-    const timeTaken = 60 - time;
+    const words = typed.trim().split(/\s+/).length;
 
-    const wpm = Math.round((words / timeTaken) * 60) || 0;
+    const wpm = Math.round((words / time) * 60) || 0;
 
     let correct = 0;
-    for (let i = 0; i < typedText.length; i++) {
-        if (typedText[i] === originalText[i]) correct++;
+    for (let i = 0; i < typed.length; i++) {
+        if (typed[i] === original[i]) correct++;
     }
 
-    const accuracy = ((correct / originalText.length) * 100).toFixed(2);
+    const accuracy = ((correct / original.length) * 100).toFixed(2);
 
-    wpmElement.innerText = wpm;
-    accuracyElement.innerText = accuracy;
+    wpmEl.innerText = wpm;
+    accEl.innerText = accuracy;
 }
